@@ -88,14 +88,18 @@ button:hover {
     background-color: #45a049; /* Cor um pouco mais escura quando o mouse passa por cima */
 }
 
-/* Design responsivo */
+/* Design responsivo para telas pequenas (tablets e dispositivos com largura até 768px) */
 @media (max-width: 768px) {
+    body {
+        padding: 10px; /* Menos espaçamento nas bordas para dispositivos menores */
+    }
+
     .container {
         width: 90%; /* Aumenta a largura do contêiner em telas pequenas */
     }
 
     h1 {
-        font-size: 22px; /* Tamanho menor do título em telas pequenas */
+        font-size: 24px; /* Ajusta o tamanho do título para telas menores */
     }
 
     button {
@@ -103,7 +107,7 @@ button:hover {
     }
 }
 
-/* Design para telas muito pequenas */
+/* Design para telas muito pequenas (smartphones, largura até 480px) */
 @media (max-width: 480px) {
     h1 {
         font-size: 20px; /* Reduz o tamanho do título para telas muito pequenas */
@@ -111,5 +115,15 @@ button:hover {
 
     input[type="file"], input[type="text"], input[type="email"], textarea, button {
         font-size: 14px; /* Reduz o tamanho da fonte para telas muito pequenas */
+    }
+
+    .container {
+        padding: 20px; /* Ajusta o padding da container para telas muito pequenas */
+    }
+
+    /* Tornar as instruções mais compactas para telas pequenas */
+    .instructions {
+        font-size: 14px; /* Ajusta o tamanho da fonte nas instruções */
+        padding: 10px; /* Menos espaçamento */
     }
 }
