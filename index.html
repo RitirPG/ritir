@@ -70,6 +70,22 @@
         #gratitudeMessage button:hover {
             background-color: #45a049;
         }
+
+        .whatsapp-button {
+            margin-top: 20px;
+            padding: 15px 25px;
+            background-color: #25d366;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .whatsapp-button:hover {
+            background-color: #128c7e;
+        }
     </style>
 </head>
 <body>
@@ -115,6 +131,9 @@
         <h2>Obrigado por sua contribuição!</h2>
         <p>Sua mensagem foi enviada com sucesso. Agradecemos por nos ajudar a melhorar nossa cidade.</p>
         <button onclick="closeGratitudeMessage()">Fechar</button>
+
+        <!-- Botão do WhatsApp -->
+        <a href="https://wa.me/1234567890?text=Oi, estou reportando um problema urbano." class="whatsapp-button" target="_blank">Fale Conosco no WhatsApp</a>
     </div>
 
     <!-- Importando o JavaScript do Leaflet -->
@@ -130,7 +149,6 @@
 
         var marker = L.marker([-23.55052, -46.633308], {draggable: true}).addTo(map);
 
-        // Atualizar os campos de lat e lng ao clicar no mapa
         map.on('click', function(e) {
             var lat = e.latlng.lat;
             var lng = e.latlng.lng;
@@ -139,7 +157,6 @@
             document.getElementById('lng').value = lng;
         });
 
-        // Atualizar lat e lng ao arrastar o marcador
         marker.on('dragend', function(e) {
             var lat = e.target.getLatLng().lat;
             var lng = e.target.getLatLng().lng;
