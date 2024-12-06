@@ -9,47 +9,73 @@
     <!-- Importando o CSS do Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.1/dist/leaflet.css" />
     
+    <!-- Importando o Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
-        /* Definindo o tamanho do mapa */
         #map {
-            height: 400px;
-            width: 100%;
+            height: 300px;
+            margin-top: 20px;
+            border: 3px solid #333;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
 
-        /* Estilo para a imagem de gratidão */
-        #gratitudeImage {
-    display: none;
-    position: fixed; /* Fixa a posição no centro da tela */
-    top: 50%; /* Posiciona no meio da tela verticalmente */
-    left: 50%; /* Posiciona no meio da tela horizontalmente */
-    transform: translate(-50%, -50%); /* Centraliza exato no meio */
-    text-align: center;
-    color: #000000; /* Cor preta */
-    font-family: 'Arial', sans-serif; /* Define a fonte */
-    font-weight: bold; /* Deixa o texto em negrito */
-    font-size: 36px; /* Aumenta o tamanho da fonte */
-    line-height: 1.5; /* Aumenta o espaçamento entre as linhas */
-    background-color: rgba(255, 255, 255, 0.8); /* Fundo semi-transparente para destacar */
-    padding: 30px; /* Adiciona um pouco de espaçamento ao redor do texto */
-    border-radius: 10px; /* Deixa os cantos arredondados */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para dar um efeito de destaque */
-}
+        #chartContainer {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            background-color: #fff;
+            border: 3px solid #333;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
 
-#gratitudeImage img {
-    max-width: 400px; /* Ajusta o tamanho da imagem */
-    width: 100%; /* Garante que a imagem não ultrapasse o tamanho do container */
-    margin-top: 20px; /* Espaçamento entre a mensagem e a imagem */
-}
+        canvas {
+            width: 100%;
+            height: 250px;
+        }
 
+        /* Mensagem de gratidão */
+        #gratitudeMessage {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            line-height: 1.5;
+            color: #333;
+            z-index: 1000;
+        }
+
+        #gratitudeMessage button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #gratitudeMessage button:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Título principal -->
         <h1>Envie Sua Foto e Fale Sobre Ela</h1>
 
-        <!-- Frases explicativas -->
         <div class="instructions">
             <p>Reporte um Problema Urbano em sua Cidade,</p>
             <p>Contribua para a melhoria dos espaços urbanos enviando uma foto que evidencie um problema em sua cidade. Descreva brevemente a situação e marque a localização no mapa abaixo.</p>
@@ -57,89 +83,110 @@
 
         <!-- Formulário para envio de foto -->
         <form id="photoForm" action="upload.php" method="post" enctype="multipart/form-data">
-            <!-- Campo de nome -->
             <label for="name">Nome (opcional):</label>
             <input type="text" id="name" name="name" placeholder="Seu nome (opcional)">
 
-            <!-- Campo de e-mail -->
             <label for="email">E-mail (opcional para anonimato):</label>
             <input type="email" id="email" name="email" placeholder="Seu e-mail (opcional)">
 
-            <!-- Campo de upload de foto -->
             <label for="photo">Escolha uma foto:</label>
             <input type="file" id="photo" name="photo" accept="image/*" required>
 
-            <!-- Campo para descrição da foto -->
             <label for="description">Informações do Problema:</label>
             <textarea id="description" name="description" rows="4" placeholder="Descreva o problema urbano..." required></textarea>
 
-            <!-- Mapa para geolocalização -->
             <label for="location">Marque a localização do problema no mapa:</label>
             <div id="map"></div>
 
-            <!-- Campos ocultos para armazenar as coordenadas -->
             <input type="hidden" id="lat" name="lat">
             <input type="hidden" id="lng" name="lng">
 
-            <!-- Botão de envio -->
             <button type="submit">Enviar</button>
         </form>
+
+        <!-- Gráfico de Problemas Solucionados e Não Solucionados (Gráfico de Pizza) -->
+        <div id="chartContainer">
+            <canvas id="problemChart"></canvas>
+        </div>
     </div>
 
-    Imagem de Gratidão
-    <div id="gratitudeImage">
-        <h2>Recebemos suas informações com sucesso! Agradecemos  pela sua contribuição para a melhoria de nossa cidade.</h2>
-        <!-- <img src="imagem-gratidao.jpg" alt="Imagem de Gratidão"> -->
+    <!-- Mensagem de Gratidão -->
+    <div id="gratitudeMessage">
+        <h2>Obrigado por sua contribuição!</h2>
+        <p>Sua mensagem foi enviada com sucesso. Agradecemos por nos ajudar a melhorar nossa cidade.</p>
+        <button onclick="closeGratitudeMessage()">Fechar</button>
     </div>
 
     <!-- Importando o JavaScript do Leaflet -->
     <script src="https://unpkg.com/leaflet@1.9.1/dist/leaflet.js"></script>
 
     <script>
-        // Inicializando o mapa com a posição inicial (São Paulo, Brasil)
-        var map = L.map('map').setView([-23.55052, -46.633308], 12); // Coordenadas iniciais
+        // Inicializando o mapa
+        var map = L.map('map').setView([-23.55052, -46.633308], 12);
 
-        // Adicionando a camada do OpenStreetMap
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // Criando um marcador inicial
-        var marker = L.marker([-23.55052, -46.633308], {draggable: true}).addTo(map); // Marcador arrastável
+        var marker = L.marker([-23.55052, -46.633308], {draggable: true}).addTo(map);
 
-        // Atualizando a posição do marcador quando o usuário clica no mapa
         map.on('click', function(e) {
             var lat = e.latlng.lat;
             var lng = e.latlng.lng;
-
-            // Atualizando o marcador
             marker.setLatLng(e.latlng);
-
-            // Atualizando os campos ocultos com as coordenadas
             document.getElementById('lat').value = lat;
             document.getElementById('lng').value = lng;
         });
 
-        // Atualizando as coordenadas quando o marcador é arrastado
         marker.on('dragend', function(e) {
             var lat = e.target.getLatLng().lat;
             var lng = e.target.getLatLng().lng;
-
-            // Atualizando os campos ocultos com as coordenadas
             document.getElementById('lat').value = lat;
             document.getElementById('lng').value = lng;
         });
 
-        // Função para exibir a imagem de gratidão ao enviar o formulário
+        // Exibir mensagem de gratidão ao enviar o formulário
         document.getElementById('photoForm').addEventListener('submit', function(event) {
-            event.preventDefault();  // Previne o envio real do formulário
+            event.preventDefault(); // Previne o envio real do formulário
+            document.getElementById('gratitudeMessage').style.display = 'block';
+        });
 
-            // Esconde o formulário e exibe a imagem de gratidão
-            document.querySelector('.container').style.display = 'none';
-            document.getElementById('gratitudeImage').style.display = 'block';
+        // Função para fechar a mensagem de gratidão
+        function closeGratitudeMessage() {
+            document.getElementById('gratitudeMessage').style.display = 'none';
+        }
 
-            // Aqui você pode incluir a lógica para enviar o formulário se necessário
-            // Por exemplo, com AJAX ou outro método de envio de dados.
+        // Criando o gráfico de pizza
+        const ctx = document.getElementById('problemChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Buracos', 'Iluminação', 'Lixo', 'Outros'],
+                datasets: [{
+                    data: [10, 8, 5, 3],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(255, 159, 64, 0.7)',
+                        'rgba(54, 162, 235, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(54, 162, 235, 1)'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                }
+            }
         });
     </script>
 </body>
