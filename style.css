@@ -7,123 +7,156 @@
 
 /* Estilo para o corpo da página */
 body {
-    font-family: Arial, sans-serif; /* Fonte limpa e legível */
-    background-image: url(26-07-23-Ponta-Verde-Maceio-Orla-Praia-SEMTUR-foto-Jonathan-Lins-7.jpg); /* Imagem de fundo */
-    background-size: cover; /* Faz a imagem cobrir toda a tela */
-    background-position: center; /* Centraliza a imagem */
-    background-attachment: fixed; /* A imagem de fundo não rola com a página */
-    display: flex; /* Usando Flexbox para centralizar o conteúdo */
-    justify-content: center; /* Alinha horizontalmente */
-    align-items: center; /* Alinha verticalmente */
-    color: #fff; /* Cor do texto é branca, para contraste com o fundo */
-    min-height: 100vh; /* Garante que a altura da tela seja 100%, mas sem cortar o conteúdo */
-    padding: 20px; /* Adiciona um padding para evitar que o conteúdo encoste nas bordas */
+    font-family: Arial, sans-serif;
+    background-image: url(26-07-23-Ponta-Verde-Maceio-Orla-Praia-SEMTUR-foto-Jonathan-Lins-7.jpg);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    min-height: 100vh;
+    padding: 20px;
 }
 
 /* Estilo para o contêiner do formulário */
 .container {
-    background-color: rgba(0, 0, 0, 0.804); /* Fundo escuro semitransparente para o formulário */
-    padding: 30px; /* Espaço interno ao redor do conteúdo */
-    border-radius: 8px; /* Bordas arredondadas */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Sombra suave */
-    width: 100%; /* A largura ocupa 100% da área disponível */
-    max-width: 600px; /* Largura máxima de 600px para telas grandes */
-    min-width: 320px; /* Largura mínima de 320px para telas pequenas */
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    width: 100%;
+    max-width: 600px;
 }
 
 /* Título principal */
 h1 {
-    text-align: center; /* Centraliza o título */
-    margin-bottom: 20px; /* Espaço abaixo do título */
-    font-size: 28px; /* Tamanho do título */
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 32px;
+    color: #FFD700;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
 }
 
 /* Estilo para as instruções */
 .instructions {
-    background-color: rgba(59, 56, 56, 0.795); /* Fundo escuro semitransparente */
-    color: white; /* Cor do texto */
+    background-color: rgba(50, 50, 50, 0.9);
+    color: #f1f1f1;
     padding: 15px;
-    margin-bottom: 20px; /* Espaço abaixo das instruções */
-    border-radius: 8px; /* Bordas arredondadas */
-    text-align: center; /* Centraliza o texto */
+    margin-bottom: 20px;
+    border-radius: 10px;
+    text-align: center;
+    border: 1px solid #333;
 }
 
 /* Estilo do formulário */
 form {
     display: flex;
-    flex-direction: column; /* Organiza os itens em uma coluna */
+    flex-direction: column;
 }
 
-/* Estilo para os rótulos (labels) */
+/* Rótulos (labels) */
 label {
-    margin-bottom: 8px; /* Espaço abaixo do rótulo */
-    font-weight: bold; /* Deixa o texto mais grosso */
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #FFD700;
 }
 
-/* Estilo para os campos de entrada de arquivos (input[type="file"]) e textareas */
+/* Campos de entrada e áreas de texto */
 input[type="file"], input[type="text"], input[type="email"], textarea, button {
-    padding: 12px; /* Aumenta o espaçamento interno nos campos */
-    margin-bottom: 15px; /* Espaço abaixo de cada campo */
-    border: 1px solid #ddd; /* Bordas finas e suaves */
-    border-radius: 5px; /* Bordas arredondadas */
-    font-size: 16px; /* Aumenta o tamanho da fonte */
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    background: rgba(255, 255, 255, 0.9);
 }
 
-/* Estilo específico para o campo de texto (textarea) */
+/* Área de texto (textarea) */
 textarea {
-    resize: vertical; /* Permite que o usuário altere o tamanho da caixa de texto verticalmente */
+    resize: vertical;
 }
 
-/* Estilo para o botão */
+/* Botão */
 button {
-    background-color: #4CAF50; /* Cor de fundo verde */
-    color: white; /* Cor do texto do botão */
-    border: none; /* Remove a borda do botão */
-    cursor: pointer; /* Muda o cursor para um ponteiro de clique */
-    transition: background-color 0.3s ease; /* Transição suave ao passar o mouse */
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 12px 16px;
+    transition: background-color 0.3s ease;
 }
 
-/* Efeito de hover (quando o mouse passa sobre o botão) */
+/* Efeito de hover para o botão */
 button:hover {
-    background-color: #45a049; /* Cor um pouco mais escura quando o mouse passa por cima */
+    background-color: #45a049;
 }
 
-/* Design responsivo para telas pequenas (tablets e dispositivos com largura até 768px) */
+/* Mapa e gráfico */
+#map, #chartContainer {
+    width: 100%;
+    height: 250px; /* Altura reduzida */
+    margin-top: 20px;
+    background-color: #fff;
+    border: 2px solid #333; /* Moldura mais visível */
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    padding: 10px; /* Espaço interno para conteúdo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Estilo interno do gráfico */
+canvas {
+    width: 100%;
+    height: 100%;
+}
+
+/* Responsivo para dispositivos menores */
 @media (max-width: 768px) {
     body {
-        padding: 10px; /* Menos espaçamento nas bordas para dispositivos menores */
+        padding: 10px;
     }
 
     .container {
-        width: 90%; /* Aumenta a largura do contêiner em telas pequenas */
+        width: 90%;
     }
 
     h1 {
-        font-size: 24px; /* Ajusta o tamanho do título para telas menores */
+        font-size: 24px;
     }
 
     button {
-        padding: 12px 24px; /* Ajusta o tamanho do botão */
+        padding: 10px 20px;
+    }
+
+    #map, #chartContainer {
+        height: 200px; /* Altura ajustada para telas menores */
     }
 }
 
-/* Design para telas muito pequenas (smartphones, largura até 480px) */
 @media (max-width: 480px) {
     h1 {
-        font-size: 20px; /* Reduz o tamanho do título para telas muito pequenas */
+        font-size: 20px;
     }
 
     input[type="file"], input[type="text"], input[type="email"], textarea, button {
-        font-size: 14px; /* Reduz o tamanho da fonte para telas muito pequenas */
+        font-size: 14px;
     }
 
     .container {
-        padding: 20px; /* Ajusta o padding da container para telas muito pequenas */
+        padding: 20px;
     }
 
-    /* Tornar as instruções mais compactas para telas pequenas */
     .instructions {
-        font-size: 14px; /* Ajusta o tamanho da fonte nas instruções */
-        padding: 10px; /* Menos espaçamento */
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    #map, #chartContainer {
+        height: 150px; /* Altura reduzida ainda mais em dispositivos muito pequenos */
     }
 }
