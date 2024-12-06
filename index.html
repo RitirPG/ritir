@@ -8,10 +8,7 @@
 
     <!-- Importando o CSS do Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.1/dist/leaflet.css" />
-
-    <!-- Importando o Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    
     <style>
         /* Definindo o tamanho do mapa */
         #map {
@@ -19,19 +16,31 @@
             width: 100%;
         }
 
-        /* Estilo para os gráficos lado a lado */
-        .charts-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
+        /* Estilo para a imagem de gratidão */
+        #gratitudeImage {
+    display: none;
+    position: fixed; /* Fixa a posição no centro da tela */
+    top: 50%; /* Posiciona no meio da tela verticalmente */
+    left: 50%; /* Posiciona no meio da tela horizontalmente */
+    transform: translate(-50%, -50%); /* Centraliza exato no meio */
+    text-align: center;
+    color: #000000; /* Cor preta */
+    font-family: 'Arial', sans-serif; /* Define a fonte */
+    font-weight: bold; /* Deixa o texto em negrito */
+    font-size: 36px; /* Aumenta o tamanho da fonte */
+    line-height: 1.5; /* Aumenta o espaçamento entre as linhas */
+    background-color: rgba(255, 255, 255, 0.8); /* Fundo semi-transparente para destacar */
+    padding: 30px; /* Adiciona um pouco de espaçamento ao redor do texto */
+    border-radius: 10px; /* Deixa os cantos arredondados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para dar um efeito de destaque */
+}
 
-        .chart {
-            width: 48%; /* Cada gráfico ocupa 48% do espaço */
-        }
+#gratitudeImage img {
+    max-width: 400px; /* Ajusta o tamanho da imagem */
+    width: 100%; /* Garante que a imagem não ultrapasse o tamanho do container */
+    margin-top: 20px; /* Espaçamento entre a mensagem e a imagem */
+}
 
-        canvas {
-            max-width: 100%; /* Ajusta os gráficos ao tamanho do container */
         }
     </style>
 </head>
@@ -42,17 +51,12 @@
 
         <!-- Frases explicativas -->
         <div class="instructions">
-            <p>Reporte um Problema Urbano em sua Cidade,
-
-                Contribua para a melhoria dos espaços urbanos enviando uma foto que evidencie um problema em sua cidade. Descreva brevemente a situação e marque a localização no mapa abaixo.
-                
-                Sua colaboração é fundamental para identificarmos e solucionarmos questões urbanas.
-                
-                </p>
+            <p>Reporte um Problema Urbano em sua Cidade,</p>
+            <p>Contribua para a melhoria dos espaços urbanos enviando uma foto que evidencie um problema em sua cidade. Descreva brevemente a situação e marque a localização no mapa abaixo.</p>
         </div>
 
         <!-- Formulário para envio de foto -->
-        <form action="upload.php" method="post" enctype="multipart/form-data">
+        <form id="photoForm" action="upload.php" method="post" enctype="multipart/form-data">
             <!-- Campo de nome -->
             <label for="name">Nome (opcional):</label>
             <input type="text" id="name" name="name" placeholder="Seu nome (opcional)">
@@ -80,16 +84,12 @@
             <!-- Botão de envio -->
             <button type="submit">Enviar</button>
         </form>
+    </div>
 
-        <!-- Gráficos -->
-        <div class="charts-container">
-            <div class="chart">
-                <canvas id="grafico1"></canvas>
-            </div>
-            <div class="chart">
-                <canvas id="grafico2"></canvas>
-            </div>
-        </div>
+    Imagem de Gratidão
+    <div id="gratitudeImage">
+        <h2>Recebemos suas informações com sucesso! Agradecemos  pela sua contribuição para a melhoria de nossa cidade.</h2>
+        <!-- <img src="imagem-gratidao.jpg" alt="Imagem de Gratidão"> -->
     </div>
 
     <!-- Importando o JavaScript do Leaflet -->
@@ -130,33 +130,16 @@
             document.getElementById('lng').value = lng;
         });
 
-        // Gráficos com Chart.js
-        // Primeiro gráfico
-        const ctx1 = document.getElementById('grafico1').getContext('2d');
-        new Chart(ctx1, {
-            type: 'bar', // Gráfico de barras
-            data: {
-                labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril'],
-                datasets: [{
-                    label: 'Problemas Reportados',
-                    data: [5, 10, 15, 20],
-                    backgroundColor: ['red', 'blue', 'green', 'orange']
-                }]
-            }
-        });
+        // Função para exibir a imagem de gratidão ao enviar o formulário
+        document.getElementById('photoForm').addEventListener('submit', function(event) {
+            event.preventDefault();  // Previne o envio real do formulário
 
-        // Segundo gráfico
-        const ctx2 = document.getElementById('grafico2').getContext('2d');
-        new Chart(ctx2, {
-            type: 'pie', // Gráfico de pizza
-            data: {
-                labels: ['Buracos', 'Lixo', 'Iluminação', 'Outros'],
-                datasets: [{
-                    label: 'Categorias',
-                    data: [30, 20, 25, 25],
-                    backgroundColor: ['purple', 'yellow', 'cyan', 'pink']
-                }]
-            }
+            // Esconde o formulário e exibe a imagem de gratidão
+            document.querySelector('.container').style.display = 'none';
+            document.getElementById('gratitudeImage').style.display = 'block';
+
+            // Aqui você pode incluir a lógica para enviar o formulário se necessário
+            // Por exemplo, com AJAX ou outro método de envio de dados.
         });
     </script>
 </body>
