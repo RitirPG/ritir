@@ -1,162 +1,212 @@
-/* Reseta margens e preenchimentos padrão do navegador */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Envio de Fotos de Problemas Urbanos</title>
+    <link rel="stylesheet" href="style.css">
 
-/* Estilo para o corpo da página */
-body {
-    font-family: Arial, sans-serif;
-    background-image: url(26-07-23-Ponta-Verde-Maceio-Orla-Praia-SEMTUR-foto-Jonathan-Lins-7.jpg);
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #fff;
-    min-height: 100vh;
-    padding: 20px;
-}
+    <!-- Importando o CSS do Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.1/dist/leaflet.css" />
+    
+    <!-- Importando o Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-/* Estilo para o contêiner do formulário */
-.container {
-    background-color: rgba(0, 0, 0, 0.8);
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-    width: 100%;
-    max-width: 600px;
-}
+    <style>
+        #map {
+            height: 300px;
+            margin-top: 20px;
+            border: 3px solid #333;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
 
-/* Título principal */
-h1 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 32px;
-    color: #FFD700;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
-}
+        #chartContainer {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            background-color: #fff;
+            border: 3px solid #333;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
 
-/* Estilo para as instruções */
-.instructions {
-    background-color: rgba(50, 50, 50, 0.9);
-    color: #f1f1f1;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    text-align: center;
-    border: 1px solid #333;
-}
+        canvas {
+            width: 100%;
+            height: 250px;
+        }
 
-/* Estilo do formulário */
-form {
-    display: flex;
-    flex-direction: column;
-}
+        /* Mensagem de gratidão */
+        #gratitudeMessage {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            line-height: 1.5;
+            color: #333;
+            z-index: 1000;
+        }
 
-/* Rótulos (labels) */
-label {
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #FFD700;
-}
+        #gratitudeMessage button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
 
-/* Campos de entrada e áreas de texto */
-input[type="file"], input[type="text"], input[type="email"], textarea, button {
-    padding: 12px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
-    background: rgba(255, 255, 255, 0.9);
-}
+        #gratitudeMessage button:hover {
+            background-color: #45a049;
+        }
 
-/* Área de texto (textarea) */
-textarea {
-    resize: vertical;
-}
+        .whatsapp-button {
+            margin-top: 20px;
+            padding: 15px 25px;
+            background-color: #25d366;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            text-decoration: none;
+        }
 
-/* Botão */
-button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-    padding: 12px 16px;
-    transition: background-color 0.3s ease;
-}
+        .whatsapp-button:hover {
+            background-color: #128c7e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Envie Sua Foto e Fale Sobre Ela</h1>
 
-/* Efeito de hover para o botão */
-button:hover {
-    background-color: #45a049;
-}
+        <div class="instructions">
+            <p>Reporte um Problema Urbano em sua Cidade,</p>
+            <p>Contribua para a melhoria dos espaços urbanos enviando uma foto que evidencie um problema em sua cidade. Descreva brevemente a situação e marque a localização no mapa abaixo.</p>
+        </div>
 
-/* Mapa e gráfico */
-#map, #chartContainer {
-    width: 100%;
-    height: 250px; /* Altura reduzida */
-    margin-top: 20px;
-    background-color: #fff;
-    border: 2px solid #333; /* Moldura mais visível */
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    padding: 10px; /* Espaço interno para conteúdo */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+        <!-- Formulário para envio de foto -->
+        <form id="photoForm" action="upload.php" method="post" enctype="multipart/form-data">
+            <label for="name">Nome (opcional):</label>
+            <input type="text" id="name" name="name" placeholder="Seu nome (opcional)">
 
-/* Estilo interno do gráfico */
-canvas {
-    width: 100%;
-    height: 100%;
-}
+            <label for="email">E-mail (opcional para anonimato):</label>
+            <input type="email" id="email" name="email" placeholder="Seu e-mail (opcional)">
 
-/* Responsivo para dispositivos menores */
-@media (max-width: 768px) {
-    body {
-        padding: 10px;
-    }
+            <label for="photo">Escolha uma foto:</label>
+            <input type="file" id="photo" name="photo" accept="image/*" required>
 
-    .container {
-        width: 90%;
-    }
+            <label for="description">Informações do Problema:</label>
+            <textarea id="description" name="description" rows="4" placeholder="Descreva o problema urbano..." required></textarea>
 
-    h1 {
-        font-size: 24px;
-    }
+            <label for="location">Marque a localização do problema no mapa:</label>
+            <div id="map"></div>
 
-    button {
-        padding: 10px 20px;
-    }
+            <input type="hidden" id="lat" name="lat">
+            <input type="hidden" id="lng" name="lng">
 
-    #map, #chartContainer {
-        height: 200px; /* Altura ajustada para telas menores */
-    }
-}
+            <button type="submit">Enviar</button>
+        </form>
 
-@media (max-width: 480px) {
-    h1 {
-        font-size: 20px;
-    }
+        <!-- Gráfico de Problemas Solucionados e Não Solucionados (Gráfico de Pizza) -->
+        <div id="chartContainer">
+            <canvas id="problemChart"></canvas>
+        </div>
+    </div>
 
-    input[type="file"], input[type="text"], input[type="email"], textarea, button {
-        font-size: 14px;
-    }
+    <!-- Mensagem de Gratidão -->
+    <div id="gratitudeMessage">
+        <h2>Obrigado por sua contribuição!</h2>
+        <p>Sua mensagem foi enviada com sucesso. Agradecemos por nos ajudar a melhorar nossa cidade.</p>
+        <button onclick="closeGratitudeMessage()">Fechar</button>
 
-    .container {
-        padding: 20px;
-    }
+        <!-- Botão do WhatsApp -->
+        <a href="https://wa.me/1234567890?text=Oi, estou reportando um problema urbano." class="whatsapp-button" target="_blank">Fale Conosco no WhatsApp</a>
+    </div>
 
-    .instructions {
-        font-size: 14px;
-        padding: 10px;
-    }
+    <!-- Importando o JavaScript do Leaflet -->
+    <script src="https://unpkg.com/leaflet@1.9.1/dist/leaflet.js"></script>
 
-    #map, #chartContainer {
-        height: 150px; /* Altura reduzida ainda mais em dispositivos muito pequenos */
-    }
-}
+    <script>
+        // Inicializando o mapa
+        var map = L.map('map').setView([-23.55052, -46.633308], 12);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        var marker = L.marker([-23.55052, -46.633308], {draggable: true}).addTo(map);
+
+        map.on('click', function(e) {
+            var lat = e.latlng.lat;
+            var lng = e.latlng.lng;
+            marker.setLatLng(e.latlng);
+            document.getElementById('lat').value = lat;
+            document.getElementById('lng').value = lng;
+        });
+
+        marker.on('dragend', function(e) {
+            var lat = e.target.getLatLng().lat;
+            var lng = e.target.getLatLng().lng;
+            document.getElementById('lat').value = lat;
+            document.getElementById('lng').value = lng;
+        });
+
+        // Exibir mensagem de gratidão ao enviar o formulário
+        document.getElementById('photoForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Previne o envio real do formulário
+            document.getElementById('gratitudeMessage').style.display = 'block';
+        });
+
+        // Função para fechar a mensagem de gratidão
+        function closeGratitudeMessage() {
+            document.getElementById('gratitudeMessage').style.display = 'none';
+        }
+
+        // Criando o gráfico de pizza
+        const ctx = document.getElementById('problemChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Buracos', 'Iluminação', 'Lixo', 'Outros'],
+                datasets: [{
+                    data: [10, 8, 5, 3],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(255, 159, 64, 0.7)',
+                        'rgba(54, 162, 235, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(54, 162, 235, 1)'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
