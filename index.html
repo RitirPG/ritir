@@ -130,6 +130,7 @@
 
         var marker = L.marker([-23.55052, -46.633308], {draggable: true}).addTo(map);
 
+        // Atualizar os campos de lat e lng ao clicar no mapa
         map.on('click', function(e) {
             var lat = e.latlng.lat;
             var lng = e.latlng.lng;
@@ -138,6 +139,7 @@
             document.getElementById('lng').value = lng;
         });
 
+        // Atualizar lat e lng ao arrastar o marcador
         marker.on('dragend', function(e) {
             var lat = e.target.getLatLng().lat;
             var lng = e.target.getLatLng().lng;
