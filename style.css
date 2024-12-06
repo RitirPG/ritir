@@ -13,6 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
+        /* Estilo do mapa */
         #map {
             height: 300px;
             margin-top: 20px;
@@ -21,6 +22,7 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
 
+        /* Container do gráfico */
         #chartContainer {
             margin-top: 20px;
             width: 100%;
@@ -37,7 +39,7 @@
             height: 250px;
         }
 
-        /* Mensagem de gratidão */
+        /* Estilo da mensagem de gratidão */
         #gratitudeMessage {
             display: none;
             position: fixed;
@@ -56,6 +58,7 @@
             z-index: 1000;
         }
 
+        /* Estilo do botão de fechar da mensagem de gratidão */
         #gratitudeMessage button {
             margin-top: 20px;
             padding: 10px 20px;
@@ -71,6 +74,7 @@
             background-color: #45a049;
         }
 
+        /* Estilo do botão do WhatsApp */
         .whatsapp-button {
             margin-top: 20px;
             padding: 15px 25px;
@@ -85,6 +89,17 @@
 
         .whatsapp-button:hover {
             background-color: #128c7e;
+        }
+
+        /* Responsividade para dispositivos móveis */
+        @media (max-width: 768px) {
+            #map {
+                height: 250px;
+            }
+
+            #chartContainer {
+                max-width: 100%;
+            }
         }
     </style>
 </head>
@@ -192,21 +207,4 @@
                     borderColor: [
                         'rgba(75, 192, 192, 1)',
                         'rgba(255, 99, 132, 1)',
-                        'rgba(255, 159, 64, 1)',
-                        'rgba(54, 162, 235, 1)'
-                    ],
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    }
-                }
-            }
-        });
-    </script>
-</body>
-</html>
+                        'rgba(255, 
