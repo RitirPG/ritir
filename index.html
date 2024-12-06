@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Envio de Fotos de Problemas Urbanos</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Importando o CSS do Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.1/dist/leaflet.css" />
+
+    <!-- Importando o Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* Definindo o tamanho do mapa */
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+
+        /* Estilo para os gráficos lado a lado */
+        .charts-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .chart {
+            width: 48%; /* Cada gráfico ocupa 48% do espaço */
+        }
+
+        canvas {
+            max-width: 100%; /* Ajusta os gráficos ao tamanho do container */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Título principal -->
+        <h1>Envie Sua Foto e Fale Sobre Ela</h1>
+
+        <!-- Frases explicativas -->
+        <div class="instructions">
+            <p>Reporte um Problema Urbano em sua Cidade,
+
+                Contribua para a melhoria dos espaços urbanos enviando uma foto que evidencie um problema em sua cidade. Descreva brevemente a situação e marque a localização no mapa abaixo.
+                
+                Sua colaboração é fundamental para identificarmos e solucionarmos questões urbanas.
+                
+                </p>
+        </div>
+
+        <!-- Formulário para envio de foto -->
+        <form action="upload.php" method="post" enctype="multipart/form-data">
+            <!-- Campo de nome -->
+            <label for="name">Nome (opcional):</label>
+            <input type="text" id="name" name="name" placeholder="Seu nome (opcional)">
+
+            <!-- Campo de e-mail -->
+            <label for="email">E-mail (opcional para anonimato):</label>
+            <input type="email" id="email" name="email" placeholder="Seu e-mail (opcional)">
+
+            <!-- Campo de upload de foto -->
+            <label for="photo">Escolha uma foto:</label>
+            <input type="file" id="photo" name="photo" accept="image/*" required>
+
+            <!-- Campo para descrição da foto -->
+            <label for="description">Informações do Problema:</label>
+            <textarea id="description" name="description" rows="4" placeholder="Descreva o problema urbano..." required></textarea>
+
+            <!-- Mapa para geolocalização -->
+            <label for="location">Marque a localização do problema no mapa:</label>
+            <div id="map"></div>
+
+            <!-- Campos ocultos para armazenar as coordenadas -->
+            <input type="hidden" id="lat" name="lat">
+            <input type="hidden" id="lng" name="lng">
+
+            <!-- Botão de envio -->
+            <button type="submit">Enviar</button>
+        </form>
+
+        <!-- Gráficos -->
+        <div class="charts-container">
+            <div class="chart">
+                <canvas id="grafico1"></canvas>
+            </div>
+            <div class="chart">
+                <canvas id="grafico2"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Importando o JavaScript do Leaflet -->
+    <script src="https://unpkg.com/leaflet@1.9.1/dist/leaflet.js"></script>
+
+    <script>
+        // Inicializando o mapa com a posição inicial (São Paulo, Brasil)
+        var map = L.map('map').setView([-23.55052, -46.633308], 12); // Coordenadas iniciais
+
+        // Adicionando a camada do OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Criando um marcador inicial
+        var marker = L.marker([-23.55052, -46.633308], {draggable: true}).addTo(map); // Marcador arrastável
+
+        // Atualizando a posição do marcador quando o usuário clica no mapa
+        map.on('click', function(e) {
+            var lat = e.latlng.lat;
+            var lng = e.latlng.lng;
+
+            // Atualizando o marcador
+            marker.setLatLng(e.latlng);
+
+            // Atualizando os campos ocultos com as coordenadas
+            document.getElementById('lat').value = lat;
+            document.getElementById('lng').value = lng;
+        });
+
+        // Atualizando as coordenadas quando o marcador é arrastado
+        marker.on('dragend', function(e) {
+            var lat = e.target.getLatLng().lat;
+            var lng = e.target.getLatLng().lng;
+
+            // Atualizando os campos ocultos com as coordenadas
+            document.getElementById('lat').value = lat;
+            document.getElementById('lng').value = lng;
+        });
+
+        // Gráficos com Chart.js
+        // Primeiro gráfico
+        const ctx1 = document.getElementById('grafico1').getContext('2d');
+        new Chart(ctx1, {
+            type: 'bar', // Gráfico de barras
+            data: {
+                labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril'],
+                datasets: [{
+                    label: 'Problemas Reportados',
+                    data: [5, 10, 15, 20],
+                    backgroundColor: ['red', 'blue', 'green', 'orange']
+                }]
+            }
+        });
+
+        // Segundo gráfico
+        const ctx2 = document.getElementById('grafico2').getContext('2d');
+        new Chart(ctx2, {
+            type: 'pie', // Gráfico de pizza
+            data: {
+                labels: ['Buracos', 'Lixo', 'Iluminação', 'Outros'],
+                datasets: [{
+                    label: 'Categorias',
+                    data: [30, 20, 25, 25],
+                    backgroundColor: ['purple', 'yellow', 'cyan', 'pink']
+                }]
+            }
+        });
+    </script>
+</body>
+</html>
