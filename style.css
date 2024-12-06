@@ -8,7 +8,7 @@
 /* Estilo para o corpo da página */
 body {
     font-family: Arial, sans-serif;
-    background-image: url(https://www.google.com/url?sa=i&url=https%3A%2F%2Fblog.hurb.com%2Fencontre-paz-e-tranquilidade-em-maceio%2F&psig=AOvVaw3zwV6FlG9xZB-jRbq3_YM1&ust=1733607903380000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCNiTxeuOlIoDFQAAAAAdAAAAABAE);
+    background-image: url(https://images.unsplash.com/photo-1551456795-29fa774d5422); /* URL direta da imagem */
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
