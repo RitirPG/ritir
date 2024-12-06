@@ -13,28 +13,121 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        #map {
-            height: 300px;
-            margin-top: 20px;
-            border: 3px solid #333;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        /* Reseta margens e preenchimentos padrão do navegador */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        #chartContainer {
-            margin-top: 20px;
+        /* Estilo para o corpo da página */
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://images.unsplash.com/photo-1551456795-29fa774d5422'); /* URL direta da imagem */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Estilo para o contêiner do formulário */
+        .container {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
             width: 100%;
             max-width: 600px;
-            padding: 20px;
-            background-color: #fff;
-            border: 3px solid #333;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
 
+        /* Título principal */
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 32px;
+            color: #FFD700;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Estilo para as instruções */
+        .instructions {
+            background-color: rgba(50, 50, 50, 0.9);
+            color: #f1f1f1;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+
+        /* Estilo do formulário */
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Rótulos (labels) */
+        label {
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #FFD700;
+        }
+
+        /* Campos de entrada e áreas de texto */
+        input[type="file"], input[type="text"], input[type="email"], textarea, button {
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Área de texto (textarea) */
+        textarea {
+            resize: vertical;
+        }
+
+        /* Botão */
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 12px 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Efeito de hover para o botão */
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Mapa e gráfico */
+        #map, #chartContainer {
+            width: 100%;
+            height: 250px; /* Altura reduzida */
+            margin-top: 20px;
+            background-color: #fff;
+            border: 2px solid #333; /* Moldura mais visível */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            padding: 10px; /* Espaço interno para conteúdo */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Estilo interno do gráfico */
         canvas {
             width: 100%;
-            height: 250px;
+            height: 100%;
         }
 
         /* Mensagem de gratidão */
@@ -85,6 +178,52 @@
 
         .whatsapp-button:hover {
             background-color: #128c7e;
+        }
+
+        /* Responsivo para dispositivos menores */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                width: 90%;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            button {
+                padding: 10px 20px;
+            }
+
+            #map, #chartContainer {
+                height: 200px; /* Altura ajustada para telas menores */
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 20px;
+            }
+
+            input[type="file"], input[type="text"], input[type="email"], textarea, button {
+                font-size: 14px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .instructions {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            #map, #chartContainer {
+                height: 150px; /* Altura reduzida ainda mais em dispositivos muito pequenos */
+            }
         }
     </style>
 </head>
